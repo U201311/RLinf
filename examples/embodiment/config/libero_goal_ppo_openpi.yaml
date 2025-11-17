@@ -23,8 +23,10 @@ runner:
     experiment_name: "test_openpi"
     logger_backends: ["tensorboard"] # wandb, swanlab
 
-  max_epochs: 1000
+  max_epochs: 400
   max_steps: -1
+  only_eval: True
+
 
   val_check_interval: -1
   save_interval: 40
@@ -101,7 +103,6 @@ rollout:
   mode: "colocate"
   generation_backend: "huggingface"
   model_dir: "/path/to/model/openpi"
-  precision: ${actor.model.precision}
   recompute_logprobs: False
   unnorm_key: libero_10
   enable_offload: False
@@ -114,7 +115,7 @@ actor:
     queue_name: "replay_buffer"
     queue_size: 0
   training_backend: "fsdp"
-  checkpoint_load_path: "/path/to/model/openpi"
+  checkpoint_load_path: "/workspace/RLinf/checkpoints/RLinf-Pi0-SFT-Spatial-Object-Goal"
   checkpoint_save_path: "../results"
   micro_batch_size: 128
   global_batch_size: 2048 # maximum : global batch size = micro batch size * actor num_processes.
@@ -124,6 +125,7 @@ actor:
   model:
     model_name: "openpi"
     precision: null
+    ckpt_path: "/workspace/RLinf/logs/20251022-07:00:51/checkpoints/global_step_360/actor/model.pt"
     num_action_chunks: 5 # interface for the env
     action_dim: 7
     is_lora: False
